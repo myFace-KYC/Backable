@@ -84,6 +84,6 @@ heroku open --app {app_name}
 
 ## License
 
-Licensed under the MIT License, Copyright © 2018-present Max Li.
+Licensed under the MIT License, Copyright © 2018-present.
 
 See [LICENSE](LICENSE.md) for more information.
