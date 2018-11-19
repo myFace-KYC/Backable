@@ -1,4 +1,7 @@
-# Kickstarter Smart Contract 
+# Kickstarter Smart Contract ([Live Version](https://kickstarter-smart-contarct.herokuapp.com))
+
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Create campaigns on top of blockchain!
 
