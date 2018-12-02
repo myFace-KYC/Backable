@@ -196,7 +196,9 @@ title: ""Flying Cars For Everyone""
                 <Grid.Row>
                   <Link route={`/campaigns/${this.props.address}/requests`}>
                     <a>
-                      <Button primary>View Requests</Button>
+                      <Button color="red" fluid primary>
+                        View Requests
+                      </Button>
                     </a>
                   </Link>
                 </Grid.Row>
