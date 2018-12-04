@@ -3,6 +3,7 @@ import { Card, Button } from "semantic-ui-react";
 
 import factory from "../ethereum/factory";
 import { Link } from "../src/routes";
+import styles from "./index.css.js";
 
 class CampaignIndex extends Component {
   static async getInitialProps() {
@@ -45,6 +46,10 @@ class CampaignIndex extends Component {
       });
   }
 
+  createLink(eth_address) {
+    return "https://rinkeby.etherscan.io/address/" + eth_address;
+  }
+
   renderCampaigns() {
     const items = this.props.campaigns.map(address => ({
       image: "https://via.placeholder.com/400x270",
@@ -63,6 +68,26 @@ class CampaignIndex extends Component {
     }));
 
     return <Card.Group items={items} />;
+  }
+
+  renderCampaignsCards() {
+    const items = this.props.campaigns.map(address => ({
+      image: "https://via.placeholder.com/400x270",
+      header: "Title of campaign",
+      extra: address,
+      description: (
+        <div>
+          <p>A Short description of the campaign and what is it about</p>
+
+          <Link route={`/campaigns/${address}`}>
+            <a>View Campaign</a>
+          </Link>
+        </div>
+      ),
+      fluid: true
+    }));
+
+    return <div items={items} />;
   }
 
   render() {

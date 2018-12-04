@@ -90,6 +90,10 @@ title: ""Flying Cars For Everyone""
       });
   }
 
+  createLink(eth_address) {
+    return "https://rinkeby.etherscan.io/address/" + eth_address;
+  }
+
   static async getInitialProps(props) {
     const campaign = Campaign(props.query.address);
     const summary = await campaign.methods.getSummary().call();
@@ -107,40 +111,48 @@ title: ""Flying Cars For Everyone""
   render() {
     return (
       <Fragment>
-        <Grid verticalAlign="middle" centered>
-          <Grid.Row center aligned stretched>
+        <Grid centered>
+          <Grid.Row center aligned verticalAlign="bottom">
             <Grid.Column width={10}>
-              <Segment.Group>
-                <Segment>
+              <div style={styles.containerHeaderSegment}>
+                <div style={styles.singleHeaderSegment}>
                   <h1>{this.state.data_title}</h1>
                   <h4>{this.state.data_sub_header}</h4>
-                </Segment>
-                <Segment>
-                  <p>{this.props.address}</p>
-                </Segment>
-              </Segment.Group>
+                </div>
+                <div style={styles.addressSegment}>
+                  <a href={this.createLink(this.props.address)}>
+                    {this.props.address}
+                  </a>
+                </div>
+              </div>
             </Grid.Column>
 
             <Grid.Column width={6}>
-              <Segment.Group>
-                <Segment>{this.state.data_campaigner_name}</Segment>
-                <Segment
-                  style={{ flexDirection: "row", overflowWrap: "break-word" }}
-                >
-                  {" "}
-                  {this.props.manager}
-                </Segment>
-              </Segment.Group>
+              <div style={styles.containerSegment}>
+                <div style={styles.singleSegment}>Created by</div>
+                <div style={styles.addressOverflow}>
+                  <h4>{this.state.data_campaigner_name}</h4>
+                </div>
+                <div style={styles.addressOverflow}>
+                  <a href={this.createLink(this.props.manager)}>
+                    {this.props.manager}
+                  </a>
+                </div>
+              </div>
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row>
+          <Grid.Row verticalAlign="middle">
             <Grid.Column width={10}>
-              <img src={this.state.data_img} alt="Banner" height="200" />
+              <img
+                style={styles.picSegment}
+                src={this.state.data_img}
+                alt="Banner"
+              />
             </Grid.Column>
             <Grid.Column width={6}>
-              <Segment.Group>
-                <Segment>
+              <div style={styles.containerSegment}>
+                <div style={styles.singleSegment}>
                   <Progress
                     style={styles.progressbar}
                     color="violet"
@@ -160,49 +172,46 @@ title: ""Flying Cars For Everyone""
                     ETH
                   </h3>
                   <p>pledged of {this.state.data_goal} ETH goal</p>
-                </Segment>
+                </div>
 
-                <Segment>
+                <div style={styles.singleSegment}>
                   <h3 style={styles.approverStyle}>
                     {this.props.approversCount}
                   </h3>
                   <p>backers</p>
-                </Segment>
+                </div>
 
-                <Segment>
+                <div style={styles.singleSegment}>
                   <h3 style={styles.approverStyle}>
                     {this.date_diff_indays(this.state.data_enddate)}
                   </h3>
                   <p>days left</p>
-                </Segment>
-              </Segment.Group>
+                </div>
+              </div>
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row>
+          <Grid.Row stretched>
             <Grid.Column width={10} floated="left">
-              <Segment>
-                <p>{this.state.data_description}</p>
-              </Segment>
+              <div style={styles.containerSegment}>
+                <p style={styles.singleSegment}>
+                  {this.state.data_description}
+                </p>
+              </div>
             </Grid.Column>
             <Grid.Column width={6} floated="right">
-              <Segment>
-                <Grid.Row>
-                  <ContributeForm address={this.props.address} />
-                </Grid.Row>
-              </Segment>
-
-              <Segment>
-                <Grid.Row>
+              <div style={styles.contributeSegment}>
+                <ContributeForm address={this.props.address} />
+                <div style={styles.viewRequest}>
                   <Link route={`/campaigns/${this.props.address}/requests`}>
                     <a>
-                      <Button color="red" fluid primary>
+                      <Button fluid primary>
                         View Requests
                       </Button>
                     </a>
                   </Link>
-                </Grid.Row>
-              </Segment>
+                </div>
+              </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>

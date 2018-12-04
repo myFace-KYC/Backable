@@ -1,0 +1,4 @@
+.overflowAddress {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

@@ -14,21 +14,21 @@ const addressOverflow = {
 
 const containerSegment = {
   background: "#FFFFFF",
-  boxShadow: "0 10px 50px 0 rgba(0,0,0,0.11)",
+  boxShadow: "0 10px 50px 0 rgba(0,0,0,0.17)",
   borderRadius: "18px",
   padding: "1.1em"
 };
 
 const contributeSegment = {
   background: "#FFFFFF",
-  boxShadow: "0 10px 50px 0 rgba(0,0,0,0.12)",
+  boxShadow: "0 10px 50px 0 rgba(0,0,0,0.17)",
   borderRadius: "18px",
   padding: "2.8em"
 };
 
 const containerHeaderSegment = {
   background: "#FFFFFF",
-  boxShadow: "0 10px 50px 0 rgba(0,0,0,0.12)",
+  boxShadow: "0 10px 50px 0 rgba(0,0,0,0.17)",
   borderRadius: "18px",
   padding: "1.4em"
 };
@@ -51,7 +51,7 @@ const singleHeaderSegment = {
 };
 const picSegment = {
   background: "#FFFFFF",
-  boxShadow: "0 14px 50px 0 rgba(0,0,0,0.12)",
+  boxShadow: "0 14px 50px 0 rgba(0,0,0,0.15)",
   borderRadius: "18px"
 };
 

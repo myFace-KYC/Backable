@@ -1,24 +1,34 @@
 import React from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Segment } from "semantic-ui-react";
 
 import { Link } from "../routes";
 
 export default () => {
   return (
-    <Menu style={{ marginTop: "10px" }}>
-      <Link route="/">
-        <a className="item">CrowdCoin</a>
-      </Link>
-
-      <Menu.Menu position="right">
+    <div
+      style={{
+        padding: "3px 30px 3px 30px",
+        marginBottom: "30px",
+        backgroundColor: "black"
+      }}
+    >
+      <Menu inverted style={{ marginTop: "0px" }}>
+        <Menu.Item>
+          <img src="https://react.semantic-ui.com/logo.png" />
+        </Menu.Item>
         <Link route="/">
-          <a className="item">Campaigns</a>
+          <a className="item">Home</a>
+        </Link>
+        <Link route="/campaigns/new">
+          <a className="item">Create Campaign</a>
         </Link>
 
-        <Link route="/campaigns/new">
-          <a className="item">+</a>
-        </Link>
-      </Menu.Menu>
-    </Menu>
+        <Menu.Menu position="right">
+          <Link route="/">
+            <a className="item">My Campaigns</a>
+          </Link>
+        </Menu.Menu>
+      </Menu>
+    </div>
   );
 };
