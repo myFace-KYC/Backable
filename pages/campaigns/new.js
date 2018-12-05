@@ -1,21 +1,21 @@
-import React, { Component, Fragment } from 'react';
-import { Form, Button, Input, Message } from 'semantic-ui-react';
+import React, { Component, Fragment } from "react";
+import { Form, Button, Input, Message } from "semantic-ui-react";
 
-import factory from '../../ethereum/factory';
-import web3 from '../../ethereum/web3';
-import { Router } from '../../src/routes';
+import factory from "../../ethereum/factory";
+import web3 from "../../ethereum/web3";
+import { Router } from "../../src/routes";
 
 class CampaignNew extends Component {
   state = {
-    minimumContribution: '',
-    errorMessage: '',
+    minimumContribution: "",
+    errorMessage: "",
     loading: false
   };
 
   onSubmit = async event => {
     event.preventDefault();
 
-    this.setState({ loading: true, errorMessage: '' });
+    this.setState({ loading: true, errorMessage: "" });
 
     try {
       const accounts = await web3.eth.getAccounts();
@@ -25,7 +25,17 @@ class CampaignNew extends Component {
           from: accounts[0]
         });
 
-      Router.pushRoute('/');
+      factory.once(
+        "returnCampaignAddress",
+        {
+          // Using an array means OR: e.g. 20 or 23
+        },
+        function(error, event) {
+          console.log(event);
+        }
+      );
+
+      Router.pushRoute("/");
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }

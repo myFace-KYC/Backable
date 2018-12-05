@@ -86,7 +86,7 @@ title: ""Flying Cars For Everyone""
           data_tags: data["tags"],
           data_img: data["image_url"]
         });
-        console.log(data);
+        // console.log(data);
       });
   }
 
@@ -97,7 +97,8 @@ title: ""Flying Cars For Everyone""
   static async getInitialProps(props) {
     const campaign = Campaign(props.query.address);
     const summary = await campaign.methods.getSummary().call();
-
+    console.log("lel");
+    console.log(summary[5]);
     return {
       address: props.query.address,
       minimumContribution: summary[0],
