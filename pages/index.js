@@ -84,26 +84,22 @@ class CampaignIndex extends Component {
   renderCampaigns() {
     let items = [];
 
-    for (let i = 0; i < this.props.campaign_array.length; i++) {
-      console.log(this.props.campaign_array[i]);
-      let card = this.props.campaign_array[i].map(campaign => ({
-        image: campaign["image_url"],
-        header: campaign["title"],
-        extra: this.props.campaign_addresses[i],
-        description: (
-          <div>
-            <p>${campaign["description"]}</p>
+    const card = this.props.campaign_array.map(campaign => ({
+      image: campaign["image_url"],
+      header: campaign["title"],
+      extra: "placeholder",
+      description: (
+        <div>
+          <p>${campaign["description"]}</p>
 
-            <Link route={`/campaigns/${this.props.campaign_addresses[i]}`}>
-              <a>View Campaign</a>
-            </Link>
-          </div>
-        ),
-        fluid: true
-      }));
+          <Link route={`/campaigns/${"placeholder"}`}>
+            <a>View Campaign</a>
+          </Link>
+        </div>
+      ),
+      fluid: true
+    }));
 
-      items.push(card);
-    }
     //
     // for (let i = 0; i < this.props.campaign_array.length; i++) {
     //
@@ -124,7 +120,7 @@ class CampaignIndex extends Component {
     //     }));
     // }
 
-    return <Card.Group items={items} />;
+    return <Card.Group items={card} />;
   }
 
   // renderCampaignsCards() {
