@@ -24,7 +24,7 @@ export default () => {
         </Link>
 
         <Menu.Menu position="right">
-          <Link route="/">
+          <Link route={`/my-campaigns`}>
             <a className="item">My Campaigns</a>
           </Link>
         </Menu.Menu>
