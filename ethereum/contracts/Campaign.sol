@@ -12,7 +12,7 @@ contract CampaignFactory {
     function createCampaign(uint minimum) public {
         address newCampaign = new Campaign(minimum, msg.sender);
         deployedCampaigns.push(newCampaign);
-        // ++ Emit event 
+        // ++ Emit event `
         emit returnCampaignAddress(newCampaign);
     }
 
@@ -36,6 +36,7 @@ contract Campaign {
     uint public minimumContribution;
     mapping(address => bool) public approvers;
     uint public approversCount;
+    
 
     // ++ Maintain a list of approver addresses
     address[] public approversList;
@@ -117,6 +118,4 @@ contract Campaign {
         return requests.length;
     }
 
-
-
-}
+}           
