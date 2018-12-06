@@ -21,12 +21,7 @@ class CampaignIndex extends Component {
       method: "GET",
       headers: headers
     })
-      .then(response => {
-        return response.json();
-      }) // change to return response.text()
-      .then(data => {
-        test = data;
-      });
+
 
     let campaign_array = [];
     let campaign_addresses = Object.keys(test);
