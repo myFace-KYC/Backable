@@ -88,8 +88,9 @@ class CampaignIndex extends Component {
         <div>
           <p>{campaign["description"]}</p>
           <p>
-            Raising <b>${campaign["goal"]}</b> USD By {campaign["creator_name"]}
+            <b>Raising</b> {campaign["goal"]}
           </p>
+          <p> By {campaign["creator_name"]}</p>
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <a>View Campaign</a>
           </Link>
@@ -100,48 +101,8 @@ class CampaignIndex extends Component {
       // link: true
     }));
 
-    //
-    // for (let i = 0; i < this.props.campaign_array.length; i++) {
-    //
-    //     const card = this.props.test[i].map(campaign => ({
-    //         image: campaign['image_url'],
-    //         header: "Title of campaign",
-    //         extra: address,
-    //         description: (
-    //             <div>
-    //                 <p>A Short description of the campaign and what is it about</p>
-    //
-    //                 <Link route={`/campaigns/${address}`}>
-    //                     <a>View Campaign</a>
-    //                 </Link>
-    //             </div>
-    //         ),
-    //         fluid: true
-    //     }));
-    // }
-
     return <Card.Group items={card} />;
   }
-
-  // renderCampaignsCards() {
-  //     const items = this.props.campaigns.map(address => ({
-  //         image: "https://via.placeholder.com/400x270",
-  //         header: "Title of campaign",
-  //         extra: address,
-  //         description: (
-  //             <div>
-  //                 <p>A Short description of the campaign and what is it about</p>
-  //
-  //                 <Link route={`/campaigns/${address}`}>
-  //                     <a>View Campaign</a>
-  //                 </Link>
-  //             </div>
-  //         ),
-  //         fluid: true
-  //     }));
-  //
-  //     return <div items={items}/>;
-  // }
 
   render() {
     return (
