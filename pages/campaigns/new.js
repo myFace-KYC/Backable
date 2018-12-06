@@ -12,6 +12,12 @@ class CampaignNew extends Component {
     loading: false
   };
 
+  componentDidMount() {
+    factory.once("returnCampaignAddress", {}, function(error, event) {
+      console.log(event);
+    });
+  }
+
   onSubmit = async event => {
     event.preventDefault();
 
@@ -24,16 +30,6 @@ class CampaignNew extends Component {
         .send({
           from: accounts[0]
         });
-
-      factory.once(
-        "returnCampaignAddress",
-        {
-          // Using an array means OR: e.g. 20 or 23
-        },
-        function(error, event) {
-          console.log(event);
-        }
-      );
 
       Router.pushRoute("/");
     } catch (err) {

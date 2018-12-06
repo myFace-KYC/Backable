@@ -24,8 +24,6 @@ class ContributeForm extends Component {
           data_eth_conv_rate: data["data"]["quotes"]["SGD"]["price"]
           // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
         });
-
-        console.log(this.state.data_eth_conv_rate);
       });
   }
 

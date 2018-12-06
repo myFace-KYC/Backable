@@ -39,15 +39,14 @@ title: ""Flying Cars For Everyone""
       data_campaigner_name: "",
       data_goal: 0,
       data_endTime: "",
-      data_tags: ""
+      data_tags: "",
+      data_backerList: []
     };
   }
 
   date_diff_indays(date2) {
     var dt1 = new Date();
-
     var dt2 = new Date(date2);
-
     return Math.floor(
       (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
         Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
@@ -97,15 +96,15 @@ title: ""Flying Cars For Everyone""
   static async getInitialProps(props) {
     const campaign = Campaign(props.query.address);
     const summary = await campaign.methods.getSummary().call();
-    console.log("lel");
-    console.log(summary[5]);
+
     return {
       address: props.query.address,
       minimumContribution: summary[0],
       balance: summary[1],
       requestsCount: summary[2],
       approversCount: summary[3],
-      manager: summary[4]
+      manager: summary[4],
+      data_backerList: summary[5]
     };
   }
 
@@ -169,7 +168,7 @@ title: ""Flying Cars For Everyone""
                   <h3 style={styles.approverStyle}>
                     {parseFloat(
                       web3.utils.fromWei(this.props.balance, "ether")
-                    ).toFixed(2)}{" "}
+                    ).toFixed(4)}{" "}
                     ETH
                   </h3>
                   <p>pledged of {this.state.data_goal} ETH goal</p>
