@@ -49,15 +49,15 @@ class CampaignNew extends Component {
         });
 
       const formData = new FormData();
-      formData.append('title',JSON.stringify(this.state.campaignName));
-      formData.append('campaign_address',JSON.stringify(this.state.campaignAddress));
-      formData.append('description',JSON.stringify(this.state.campaignDetails));
-      formData.append('goal',JSON.stringify(this.state.campaignTarget));
+      formData.append('title',this.state.campaignName);
+      formData.append('campaign_address',this.state.campaignAddress);
+      formData.append('description',this.state.campaignDetails);
+      formData.append('goal',this.state.campaignTarget);
       formData.append('image',this.state.selectedFile);
-      formData.append('tags',JSON.stringify(this.state.tags));
-      formData.append('end_date',JSON.stringify(this.state.endDate));
-      formData.append('creator_name',JSON.stringify(this.state.creatorName));
-      formData.append('campaigner_address',JSON.stringify(accounts[0]));
+      formData.append('tags',this.state.tags);
+      formData.append('end_date',this.state.endDate);
+      formData.append('creator_name',this.state.creatorName);
+      formData.append('campaigner_address',accounts[0]);
       for (var pair of formData.entries()) {
           console.log(pair[0]+ ', ' + pair[1]); 
       }
@@ -67,10 +67,7 @@ class CampaignNew extends Component {
         method: "PUT",
         body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
+
 
 
 
