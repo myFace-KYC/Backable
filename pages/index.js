@@ -87,7 +87,9 @@ class CampaignIndex extends Component {
       description: (
         <div>
           <p>{campaign["description"]}</p>
-
+          <p>
+            Raising <b>${campaign["goal"]}</b> USD By {campaign["creator_name"]}
+          </p>
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <a>View Campaign</a>
           </Link>

@@ -12,30 +12,19 @@ const fetch = require("node-fetch");
 let accounts = [];
 
 class CampaignIndex extends Component {
-  onComponentDidMount() {
-    console.log("TEST");
-  }
-
   static async getInitialProps(props) {
-    let campaigns_data = {};
+    let created_campaign_data = {};
+    let created_campaign_array = [];
+    let backed_campaign_data = {};
+    let backed_campaign_array = [];
+
+    // Get user's ETH address
 
     await web3.eth.getAccounts().then(address => (accounts = address));
 
-    // console.log(await test);
-
-    // (function loop() {
-    //     if (web3.eth.accounts[0]) {
-    //         console.log(web3.eth.accounts[0]);
-    //     } else {
-    //         console.log(web3.eth.getAccounts());
-    //
-    //         setTimeout(loop, 100);
-    //     }
-    // }());
-
-    console.log(accounts);
-
     // console.log(accounts);
+
+    // Fetching campaigns CREATED by user
 
     let headers = {
       campaigner_address: await accounts[0]
@@ -49,27 +38,27 @@ class CampaignIndex extends Component {
         return response.json();
       }) // change to return response.text()
       .then(data => {
-        campaigns_data = data;
+        created_campaign_data = data;
       });
 
-    if (!campaign_data) {
-      let campaign_addresses = [];
-      let campaign_array = [];
-      return { campaign_addresses, campaign_array };
+    // console.log(created_campaign_data);
+
+    if (created_campaign_data === null) {
+      return { created_campaign_array, backed_campaign_array };
     }
 
-    let campaign_addresses = [];
-    let campaign_array = [];
-    let hashes = Object.keys(campaigns_data);
+    let hashes = Object.keys(created_campaign_data);
+
+    console.log(created_campaign_data);
 
     let campaign_data = {};
 
-    hashes.forEach(function(address) {
+    for (const hash of hashes) {
       let headers = {
-        campaign_address: address
+        campaign_address: created_campaign_data[hash]["campaign_address"]
       };
 
-      fetch("https://backable-db.herokuapp.com/api/v1/get-campaign", {
+      await fetch("https://backable-db.herokuapp.com/api/v1/get-campaign", {
         method: "GET",
         headers: headers
       })
@@ -80,34 +69,100 @@ class CampaignIndex extends Component {
           campaign_data = data;
         });
 
-      campaign_data["campaign_address"] = address;
-      campaign_array.push(campaign_data);
-    });
+      campaign_data["campaign_address"] =
+        created_campaign_data[hash]["campaign_address"];
+      created_campaign_array.push(await campaign_data);
+      console.log(created_campaign_array);
+    }
 
-    console.log(campaign_array);
+    // Fetching campaigns BACKED by user
 
-    // TODO: CALL BACKED AND CREATED CAMPAIGNS SEPARATELY
+    let backed_headers = {
+      backer_address: await accounts[0]
+    };
 
-    return { campaign_addresses, campaign_array };
+    await fetch(
+      "https://backable-db.herokuapp.com/api/v1/get-campaigns-by-backer",
+      {
+        method: "GET",
+        headers: backed_headers
+      }
+    )
+      .then(response => {
+        return response.json();
+      }) // change to return response.text()
+      .then(data => {
+        backed_campaign_data = data;
+      });
+
+    // console.log(created_campaign_data);
+
+    if (backed_campaign_data === null) {
+      return { created_campaign_array, backed_campaign_array };
+    }
+
+    let backed_hashes = Object.keys(created_campaign_data);
+
+    console.log(created_campaign_data);
+
+    campaign_data = {};
+
+    for (const hash of hashes) {
+      let headers = {
+        campaign_address: created_campaign_data[hash]["campaign_address"]
+      };
+
+      await fetch("https://backable-db.herokuapp.com/api/v1/get-campaign", {
+        method: "GET",
+        headers: headers
+      })
+        .then(response => {
+          return response.json();
+        }) // change to return response.text()
+        .then(data => {
+          campaign_data = data;
+        });
+
+      campaign_data["campaign_address"] =
+        created_campaign_data[hash]["campaign_address"];
+      backed_campaign_array.push(await campaign_data);
+      console.log(backed_campaign_array);
+    }
+
+    return { created_campaign_array, backed_campaign_array };
   }
 
   static createLink(eth_address) {
     return "https://rinkeby.etherscan.io/address/" + eth_address;
   }
 
-  renderCampaigns() {
-    if (this.props.campaign_array == []) {
-      return "You haven't ";
+  renderCampaigns(campaign_type) {
+    let campaign_array = [];
+
+    if (campaign_type === "backed") {
+      campaign_array = this.props.backed_campaign_array;
+      if (!campaign_array.length) {
+        console.log("am");
+        return <p>You haven't backed any campaigns!</p>;
+      }
+    } else if (campaign_type === "created") {
+      campaign_array = this.props.created_campaign_array;
+      if (!campaign_array.length) {
+        return <p>You haven't created any campaigns!</p>;
+      }
     }
 
-    const card = this.props.campaign_array.map(campaign => ({
+    const card = campaign_array.map(campaign => ({
       image: campaign["image_url"],
       header: campaign["title"],
       extra: campaign["campaign_address"],
       description: (
         <div>
           <p>{campaign["description"]}</p>
-
+          <p>
+            <b>Raising</b> {campaign["goal"]}
+          </p>
+          <p> By {campaign["creator_name"]}</p>
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <a>View Campaign</a>
           </Link>
@@ -124,7 +179,7 @@ class CampaignIndex extends Component {
   render() {
     return (
       <div>
-        <h3>Campaigns You've Created</h3>
+        <h2>Campaigns You've Created</h2>
 
         {/*<Link route="/campaigns/new">*/}
         {/*<a>*/}
@@ -137,11 +192,11 @@ class CampaignIndex extends Component {
         {/*</a>*/}
         {/*</Link>*/}
 
-        {this.renderCampaigns()}
+        {this.renderCampaigns("created")}
 
-        <h3> Campaigns You've Backed</h3>
+        <h2> Campaigns You've Backed</h2>
 
-        {this.renderCampaigns()}
+        {this.renderCampaigns("backed")}
       </div>
     );
   }
