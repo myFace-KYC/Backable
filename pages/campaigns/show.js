@@ -24,7 +24,6 @@ goal: ""1000000""
 image_url: "https://firebasestorage.googleapis.com/v0/b/backable-5ceed.appspot.com/o/images%2F%220xcF01971DB0CAB2CBeE4A8C21BB7638aC1FA1c38c%22.jpg?alt=media&token=1"
 tags: ""cars""
 title: ""Flying Cars For Everyone""
-
 */
 
   constructor(props) {
@@ -59,7 +58,6 @@ title: ""Flying Cars For Everyone""
     let myheaders = {
       // USE this for when create campaign has been finished
       // "campaign_address":  this.props.address ,
-
       // This is hardcoded placedholder address, needs to change
       campaign_address: "0xcF01071DB0CAB2CBeE4A8C21BB7638aC1FA1c38c"
     };
