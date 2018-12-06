@@ -11,7 +11,7 @@ let num_campaigns = 10;
 
 class CampaignIndex extends Component {
   static async getInitialProps() {
-    let test = {};
+    let campaign_data = {};
 
     let headers = {
       num_entities: num_campaigns
@@ -21,21 +21,23 @@ class CampaignIndex extends Component {
       method: "GET",
       headers: headers
     })
-
+      .then(response => {
+        return response.json();
+      }) // change to return response.text()
+      .then(data => {
+        campaign_data = data;
+      });
 
     let campaign_array = [];
-    let campaign_addresses = Object.keys(test);
+    let campaign_addresses = Object.keys(campaign_data);
 
     campaign_addresses.forEach(function(key) {
-      test[key]["campaign_address"] = key;
-      campaign_array.push(test[key]);
+      campaign_data[key]["campaign_address"] = key;
+      campaign_data[key]["campaign_address"] = key;
+      campaign_array.push(campaign_data[key]);
     });
 
-    // console.log(campaign_array);
-
-    const campaigns = await factory.methods.getDeployedCampaigns().call();
-    // console.log(campaigns);
-    return { campaigns, test, campaign_addresses, campaign_array };
+    return { campaign_addresses, campaign_array };
   }
 
   // getCampaignInfo() {
@@ -73,7 +75,7 @@ class CampaignIndex extends Component {
   //         });
   // }
 
-  createLink(eth_address) {
+  static createLink(eth_address) {
     return "https://rinkeby.etherscan.io/address/" + eth_address;
   }
 
@@ -85,7 +87,9 @@ class CampaignIndex extends Component {
       description: (
         <div>
           <p>{campaign["description"]}</p>
-
+          <p>
+            Raising <b>${campaign["goal"]}</b> USD By {campaign["creator_name"]}
+          </p>
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <a>View Campaign</a>
           </Link>
