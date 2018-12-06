@@ -32,6 +32,7 @@ class CampaignIndex extends Component {
     let campaign_addresses = Object.keys(test);
 
     campaign_addresses.forEach(function(key) {
+      test[key]["campaign_address"] = key;
       campaign_array.push(test[key]);
     });
 
@@ -82,22 +83,22 @@ class CampaignIndex extends Component {
   }
 
   renderCampaigns() {
-    let items = [];
-
     const card = this.props.campaign_array.map(campaign => ({
       image: campaign["image_url"],
       header: campaign["title"],
-      extra: "placeholder",
+      extra: campaign["campaign_address"],
       description: (
         <div>
-          <p>${campaign["description"]}</p>
+          <p>{campaign["description"]}</p>
 
-          <Link route={`/campaigns/${"placeholder"}`}>
+          <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <a>View Campaign</a>
           </Link>
         </div>
       ),
-      fluid: true
+      fluid: true,
+      raised: true
+      // link: true
     }));
 
     //
