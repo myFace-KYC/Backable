@@ -57,9 +57,9 @@ title: ""Flying Cars For Everyone""
     // The address of the campaign to be sent in the header
     let myheaders = {
       // USE this for when create campaign has been finished
-      // "campaign_address":  this.props.address ,
+      "campaign_address":  this.props.address ,
       // This is hardcoded placedholder address, needs to change
-      campaign_address: "0xcF01071DB0CAB2CBeE4A8C21BB7638aC1FA1c38c"
+      //campaign_address: "0xcF01071DB0CAB2CBeE4A8C21BB7638aC1FA1c38c"
     };
 
     // GET call to Database
@@ -71,15 +71,15 @@ title: ""Flying Cars For Everyone""
       .then(data => {
         // Update the data state with db values
         this.setState({
-          data_campaigner_name: "Jason Bourne",
-          data_sub_header: "A short description of your project and what it is",
-          data_enddate: "12/31/2018",
+          data_campaigner_name: data["creator_name"],
+          data_sub_header: data["campaign_subheader"],
+          data_enddate: data["end_date"],
 
           data_title: data["title"],
           data_description: data["description"],
           data_campaigner_address: data["campaigner_address"],
           // data_goal: data["goal"],
-          data_goal: "50",
+          data_goal: data["goal"],
           data_tags: data["tags"],
           data_img: data["image_url"]
         });
