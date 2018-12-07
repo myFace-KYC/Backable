@@ -94,7 +94,7 @@ class CampaignNew extends Component {
         method: "PUT",
         body: formData
       })
-      Router.pushRoute('/');
+      Router.pushRoute('/campaigns/' + this.state.campaignAddress);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
