@@ -3,7 +3,7 @@ import { Card, Button } from "semantic-ui-react";
 
 import factory from "../ethereum/factory";
 import { Link } from "../src/routes";
-import styles from "./index.css.js";
+import styles from "./campaigns/show.css.js";
 
 const fetch = require("node-fetch");
 
@@ -87,6 +87,7 @@ class CampaignIndex extends Component {
       image: campaign["image_url"],
       header: campaign["title"],
       extra: campaign["campaign_address"],
+
       description: (
         <div>
           <p>{campaign["description"]}</p>
@@ -100,29 +101,17 @@ class CampaignIndex extends Component {
       raised: true
       // link: true
     }));
-
-    //
-    // for (let i = 0; i < this.props.campaign_array.length; i++) {
-    //
-    //     const card = this.props.test[i].map(campaign => ({
-    //         image: campaign['image_url'],
-    //         header: "Title of campaign",
-    //         extra: address,
-    //         description: (
-    //             <div>
-    //                 <p>A Short description of the campaign and what is it about</p>
-    //
-    //                 <Link route={`/campaigns/${address}`}>
-    //                     <a>View Campaign</a>
-    //                 </Link>
-    //             </div>
-    //         ),
-    //         fluid: true
-    //     }));
-    // }
-
     return <Card.Group items={card} />;
   }
+
+  // renderCampaigns2() {
+
+  //   var cardList = this.props.campaign_array.map(function(name) {
+  //     return<li>{name}</li>
+
+  //   })
+  //   return <ul>{cardList}</ul>
+  // }
 
   // renderCampaignsCards() {
   //     const items = this.props.campaigns.map(address => ({
