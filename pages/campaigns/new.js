@@ -1,5 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Form, Button, Input, Message } from "semantic-ui-react";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+
+// CSS Modules, react-datepicker-cssmodules.css
+// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
@@ -87,6 +92,27 @@ class CampaignNew extends Component {
 
   onSubmit = async event => {
     event.preventDefault();
+    
+    let error = false;
+    if(this.state.campaignTarget <=0){
+      this.setState({targetError:true})
+      error=true
+    }else{
+      this.setState({targetError:false})
+    }
+    if(this.state.minimumContribution <=0){
+      this.setState({minError:true})
+      error=true
+    }else{
+      this.setState({minError:false})
+    }
+
+    if(error){
+      this.setState({formError:true})
+      return
+    }else{
+      this.setState({formError:false})
+    }
 
 
     this.setState({ loading: true, errorMessage: "" });
@@ -155,11 +181,13 @@ class CampaignNew extends Component {
       <Fragment>
         <h3>Create a Campaign</h3>
 
-        <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+        <Form onSubmit={this.onSubmit} error={this.state.minError||this.state.targetError}>
           
           <Form.Field>
-            <label>Campaigner Name</label>
-            <Input
+            <Form.Input
+              required = {true}
+              label = "Campaigner Name"
+              placeholder = "Enter Your Name"
               value={this.state.creatorName}
               onChange={event =>
                 this.setState({ creatorName: event.target.value })
@@ -168,8 +196,10 @@ class CampaignNew extends Component {
           </Form.Field>
 
           <Form.Field>
-            <label>Campaign Name</label>
-            <Input
+            <Form.Input
+              required = {true}
+              label = "Campaign Name"
+              placeholder = "Enter a title for your campaign"
               value={this.state.campaignName}
               onChange={event =>
                 this.setState({ campaignName: event.target.value })
@@ -178,8 +208,10 @@ class CampaignNew extends Component {
           </Form.Field>
 
           <Form.Field>
-            <label>Campaign Sub Header</label>
-            <Input
+            <Form.Input
+              required = {true}
+              label = "Campaigner Sub Header"
+              placeholder = "Enter a one liner about campaign"
               value={this.state.campaignSubHeader}
               onChange={event =>
                 this.setState({ campaignSubHeader: event.target.value })
@@ -188,26 +220,30 @@ class CampaignNew extends Component {
           </Form.Field>
 
           <Form.Field>
-            <label>Campaign End Date</label>
-            <Input
+            <Form.Input
+              required = {true}
+              label = "Campaigner End Date"
+              type="date"
               value={this.state.endDate}
               onChange={event =>
                 this.setState({ endDate: event.target.value })
               }
             />
           </Form.Field>
-
+          
           <Form.Field>
-            <label>Campaign Photo</label>
-            <Input 
-            type="file" onChange={this.fileChangedHandler.bind(this)}
+            <Form.Input
+              required = {true}
+              label = "Campaigner Photo"
+              type="file" onChange={this.fileChangedHandler.bind(this)}
             />
             <img id="target" src={this.state.image}/>
           </Form.Field>
 
-          <Form.Field>
+          <Form.Field required>
             <label>Campaign Details</label>
             <textarea
+              placeholder="Enter your campaign details"
               value={this.state.campaignDetails}
               onChange={event =>
                 this.setState({ campaignDetails: event.target.value })
@@ -216,8 +252,10 @@ class CampaignNew extends Component {
           </Form.Field>
 
           <Form.Field>
-            <label>Tags</label>
-            <Input
+            <Form.Input
+              required = {true}
+              label="Tags"
+              placeholder = "Enter a tag"
               value={this.state.tags}
               onChange={event =>
                 this.setState({ tags: event.target.value })
@@ -225,9 +263,11 @@ class CampaignNew extends Component {
             />
           </Form.Field>
 
-          <Form.Field>
+          <Form.Field required>
             <label>Campaign Target</label>
             <Input
+              placeholder = "Enter your campaign goal"
+              type = "number"
               value={this.state.campaignTarget}
               onChange={event =>
                 this.setState({ campaignTarget: event.target.value })
@@ -237,11 +277,23 @@ class CampaignNew extends Component {
             />
           </Form.Field>
           <p>Converts to {this.calculateEther(this.state.campaignTarget).toFixed(6)} ETH</p>
+          {
+            this.state.targetError
+            ?
+              <Message
+                error
+                header = "Invalid Amount"
+                content = "Please input a amount larger than 0."
+              />
+            :
+            null
+          }
 
-
-          <Form.Field>
+          <Form.Field required>
             <label>Minimum Contribution</label>
             <Input
+              placeholder = "Enter an amount"
+              type = "number"
               label="SGD"
               labelPosition="right"
               value={this.state.minimumContribution}
@@ -251,8 +303,18 @@ class CampaignNew extends Component {
             />
           </Form.Field>
           <p>Converts to {this.calculateEther(this.state.minimumContribution).toFixed(6)} ETH</p>
-
-          <Message error header="Oops!" content={this.state.errorMessage} />
+          {
+            this.state.minError
+            ?
+              <Message
+                error
+                header = "Invalid Amount"
+                content = "Please input a amount larger than 0."
+              />
+            :
+            null
+          }
+          
           <Button disabled={!isEnabled} loading={this.state.loading} primary>
             Create!
           </Button>
