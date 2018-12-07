@@ -11,8 +11,35 @@ class RequestNew extends Component {
     description: '',
     recipient: '',
     loading: false,
-    errorMessage: ''
+    errorMessage: '',
+    data_eth_conv_rate: 0
   };
+
+  componentDidMount() {
+    fetch("https://api.coinmarketcap.com/v2/ticker/1027/?convert=SGD", {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          data_eth_conv_rate: data["data"]["quotes"]["SGD"]["price"]
+          // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
+        });
+      });
+  }
+
+  calculateEther(val) {
+    var val_in_ether;
+    if (val == "") {
+      val_in_ether = 0;
+    } 
+    else {
+      val_in_ether =
+        parseFloat(val) / this.state.data_eth_conv_rate;
+    }
+    return val_in_ether;
+  }
+
 
   static async getInitialProps(props) {
     const { address } = props.query;
@@ -61,12 +88,15 @@ class RequestNew extends Component {
           </Form.Field>
 
           <Form.Field>
-            <label>Value in Ether</label>
+            <label>Value</label>
             <Input
               value={this.state.value}
               onChange={event => this.setState({ value: event.target.value })}
+              label="SGD"
+              labelPosition="right"
             />
           </Form.Field>
+          <p>Converts to {this.calculateEther(this.state.value).toFixed(6)} ETH</p>
 
           <Form.Field>
             <label>Recipient</label>
