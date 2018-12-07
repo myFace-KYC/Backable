@@ -6,6 +6,20 @@ import web3 from "../../ethereum/web3";
 import { Router } from "../../src/routes";
 import CampaignFactory from "../../ethereum/build/CampaignFactory.json";
 
+function validate(a,b,c,d,e,f,g,h,i){
+    return{
+      a: a.length === 0,
+      b: b.length === 0,
+      c: c.length === 0,
+      d: d.length === 0,
+      e: e === null,
+      f: f.length === 0,
+      g: g.length === 0,
+      h: h.length === 0,
+      i: i.length === 0,
+    };
+  }
+
 class CampaignNew extends Component {
   state = {
     minimumContribution: '',
@@ -23,8 +37,18 @@ class CampaignNew extends Component {
     errorMessage: '',
     loading: false,
     data_eth_conv_rate: 0,
-    value: "",
-    conv_value: ""
+    value: '',
+    conv_value: '',
+    formError: false,
+    campaignNameError:false,
+    creatorNameError:false,
+    subHeaderError:false,
+    endDateError:false,
+    imageError:false,
+    detailsError:false,
+    tagError:false,
+    targetError:false,
+    minError:false
   };
 
   componentDidMount() {
@@ -63,6 +87,7 @@ class CampaignNew extends Component {
 
   onSubmit = async event => {
     event.preventDefault();
+
 
     this.setState({ loading: true, errorMessage: "" });
 
@@ -114,6 +139,18 @@ class CampaignNew extends Component {
   }
 
   render() {
+    const errors = validate(
+      this.state.campaignName,
+      this.state.creatorName, 
+      this.state.campaignSubHeader,
+      this.state.endDate,
+      this.state.image,
+      this.state.campaignDetails,
+      this.state.tags,
+      this.state.campaignTarget,
+      this.state.minimumContribution
+      );
+    const isEnabled = !Object.keys(errors).some(x=>errors[x]);
     return (
       <Fragment>
         <h3>Create a Campaign</h3>
@@ -216,7 +253,7 @@ class CampaignNew extends Component {
           <p>Converts to {this.calculateEther(this.state.minimumContribution).toFixed(6)} ETH</p>
 
           <Message error header="Oops!" content={this.state.errorMessage} />
-          <Button loading={this.state.loading} primary>
+          <Button disabled={!isEnabled} loading={this.state.loading} primary>
             Create!
           </Button>
         </Form>
