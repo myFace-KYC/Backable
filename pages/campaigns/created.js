@@ -142,7 +142,6 @@ class CampaignIndex extends Component {
     if (campaign_type === "backed") {
       campaign_array = this.props.backed_campaign_array;
       if (!campaign_array.length) {
-        console.log("am");
         return <p>You haven't backed any campaigns!</p>;
       }
     } else if (campaign_type === "created") {
@@ -163,8 +162,13 @@ class CampaignIndex extends Component {
             <b>Raising</b> {campaign["goal"]}
           </p>
           <p> By {campaign["creator_name"]}</p>
+          {/*<Link route={`/campaigns/${campaign["campaign_address"]}`}>*/}
+          {/*<a>View Campaign</a>*/}
+          {/*</Link>*/}
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
-            <a>View Campaign</a>
+            <a>
+              <Button floated="left" content="View Campaign" primary />
+            </a>
           </Link>
         </div>
       ),
