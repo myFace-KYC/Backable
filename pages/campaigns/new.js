@@ -11,6 +11,7 @@ class CampaignNew extends Component {
     minimumContribution: '',
     campaignName: '',
     campaignAddress:'',
+    campaignSubHeader:'',
     creatorName:'',
     endDate:'',
     campaignerAddress:'',
@@ -56,6 +57,7 @@ class CampaignNew extends Component {
       formData.append('image',this.state.selectedFile);
       formData.append('tags',this.state.tags);
       formData.append('end_date',this.state.endDate);
+      formData.append('campaign_subheader',this.state.campaignSubHeader);
       formData.append('creator_name',this.state.creatorName);
       formData.append('campaigner_address',accounts[0]);
       for (var pair of formData.entries()) {
@@ -113,6 +115,16 @@ class CampaignNew extends Component {
               value={this.state.campaignName}
               onChange={event =>
                 this.setState({ campaignName: event.target.value })
+              }
+            />
+          </Form.Field>
+
+          <Form.Field>
+            <label>Campaign Sub Header</label>
+            <Input
+              value={this.state.campaignSubHeader}
+              onChange={event =>
+                this.setState({ campaignSubHeader: event.target.value })
               }
             />
           </Form.Field>
