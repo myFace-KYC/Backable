@@ -3,7 +3,7 @@ import { Card, Button } from "semantic-ui-react";
 
 import factory from "../ethereum/factory";
 import { Link } from "../src/routes";
-import styles from "./index.css.js";
+import styles from "./campaigns/show.css.js";
 
 const fetch = require("node-fetch");
 
@@ -11,7 +11,7 @@ let num_campaigns = 10;
 
 class CampaignIndex extends Component {
   static async getInitialProps() {
-    let campaign_data = {};
+    let test = {};
 
     let headers = {
       num_entities: num_campaigns
@@ -25,19 +25,22 @@ class CampaignIndex extends Component {
         return response.json();
       }) // change to return response.text()
       .then(data => {
-        campaign_data = data;
+        test = data;
       });
 
     let campaign_array = [];
-    let campaign_addresses = Object.keys(campaign_data);
+    let campaign_addresses = Object.keys(test);
 
     campaign_addresses.forEach(function(key) {
-      campaign_data[key]["campaign_address"] = key;
-      campaign_data[key]["campaign_address"] = key;
-      campaign_array.push(campaign_data[key]);
+      test[key]["campaign_address"] = key;
+      campaign_array.push(test[key]);
     });
 
-    return { campaign_addresses, campaign_array };
+    // console.log(campaign_array);
+
+    const campaigns = await factory.methods.getDeployedCampaigns().call();
+    // console.log(campaigns);
+    return { campaigns, test, campaign_addresses, campaign_array };
   }
 
   // getCampaignInfo() {
@@ -75,7 +78,7 @@ class CampaignIndex extends Component {
   //         });
   // }
 
-  static createLink(eth_address) {
+  createLink(eth_address) {
     return "https://rinkeby.etherscan.io/address/" + eth_address;
   }
 
@@ -84,13 +87,11 @@ class CampaignIndex extends Component {
       image: campaign["image_url"],
       header: campaign["title"],
       extra: campaign["campaign_address"],
+
       description: (
         <div>
           <p>{campaign["description"]}</p>
-          <p>
-            <b>Raising</b> {campaign["goal"]}
-          </p>
-          <p> By {campaign["creator_name"]}</p>
+
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <a>View Campaign</a>
           </Link>
@@ -100,9 +101,37 @@ class CampaignIndex extends Component {
       raised: true
       // link: true
     }));
-
     return <Card.Group items={card} />;
   }
+
+  // renderCampaigns2() {
+
+  //   var cardList = this.props.campaign_array.map(function(name) {
+  //     return<li>{name}</li>
+
+  //   })
+  //   return <ul>{cardList}</ul>
+  // }
+
+  // renderCampaignsCards() {
+  //     const items = this.props.campaigns.map(address => ({
+  //         image: "https://via.placeholder.com/400x270",
+  //         header: "Title of campaign",
+  //         extra: address,
+  //         description: (
+  //             <div>
+  //                 <p>A Short description of the campaign and what is it about</p>
+  //
+  //                 <Link route={`/campaigns/${address}`}>
+  //                     <a>View Campaign</a>
+  //                 </Link>
+  //             </div>
+  //         ),
+  //         fluid: true
+  //     }));
+  //
+  //     return <div items={items}/>;
+  // }
 
   render() {
     return (
