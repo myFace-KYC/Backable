@@ -57,9 +57,9 @@ title: ""Flying Cars For Everyone""
     // The address of the campaign to be sent in the header
     let myheaders = {
       // USE this for when create campaign has been finished
-      // "campaign_address":  this.props.address ,
+      campaign_address: this.props.address
       // This is hardcoded placedholder address, needs to change
-      campaign_address: "0xcF01071DB0CAB2CBeE4A8C21BB7638aC1FA1c38c"
+      // campaign_address: "0xcF01071DB0CAB2CBeE4A8C21BB7638aC1FA1c38c"
     };
 
     // GET call to Database
@@ -83,7 +83,7 @@ title: ""Flying Cars For Everyone""
           data_tags: data["tags"],
           data_img: data["image_url"]
         });
-        // console.log(data);
+        console.log(data);
       });
   }
 
