@@ -5,14 +5,27 @@ import Campaign from '../../../ethereum/campaign';
 import web3 from '../../../ethereum/web3';
 import { Link, Router } from '../../../src/routes';
 
+function validate(description,value,recipient){
+    return{
+      description: description.length === 0,
+      value: value.length === 0,
+      recipient: recipient.length === 0,
+    };
+  }
+
+
 class RequestNew extends Component {
   state = {
     value: '',
     description: '',
     recipient: '',
     loading: false,
-    errorMessage: '',
-    data_eth_conv_rate: 0
+    errorMessage: 'Invalid fields.',
+    data_eth_conv_rate: 0,
+    descriptionError: false,
+    recipientError:false,
+    valueError: false,
+    formError:false
   };
 
   componentDidMount() {
@@ -49,6 +62,32 @@ class RequestNew extends Component {
 
   onSubmit = async event => {
     event.preventDefault();
+    let error = false;
+    if(this.state.description===''){
+      this.setState({descriptionError:true})
+      error=true
+    }else{
+      this.setState({descriptionError:false})
+    }
+    if(this.state.value ==='0'){
+      this.setState({valueError:true})
+      error=true
+    }else{
+      this.setState({valueError:false})
+    }
+    if(web3.utils.isAddress(this.state.recipient)){
+      this.setState({recipientError:false})
+    }else{
+      this.setState({recipientError:true})
+      error=true
+    }
+
+    if(error){
+      this.setState({formError:true})
+      return
+    }else{
+      this.setState({formError:false})
+    }
 
     const campaign = Campaign(this.props.address);
     const { description, value, recipient } = this.state;
@@ -58,7 +97,7 @@ class RequestNew extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       await campaign.methods
-        .createRequest(description, web3.utils.toWei(value, 'ether'), recipient)
+        .createRequest(description, this.calculateEther(this.state.value), recipient)
         .send({ from: accounts[0] });
 
       Router.pushRoute(`/campaigns/${this.props.address}/requests`);
@@ -70,16 +109,22 @@ class RequestNew extends Component {
   };
 
   render() {
+    const errors = validate(this.state.description,
+      this.state.value, this.state.recipient);
+    const isEnabled = !Object.keys(errors).some(x=>errors[x]);
     return (
       <Fragment>
         <Link route={`/campaigns/${this.props.address}/requests`}>
           <a>Back</a>
         </Link>
         <h3>Create a Request</h3>
-        <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+        <Form onSubmit={this.onSubmit} error={this.state.formError}>
           <Form.Field>
-            <label>Description</label>
-            <Input
+            <Form.Input
+              required={true}
+              label = "Description"
+              placeholder = "Enter a request"
+              error={this.state.descriptionError}
               value={this.state.description}
               onChange={event =>
                 this.setState({ description: event.target.value })
@@ -88,8 +133,12 @@ class RequestNew extends Component {
           </Form.Field>
 
           <Form.Field>
-            <label>Value</label>
-            <Input
+            <Form.Input
+              required={true}
+              label = "Value"
+              type = "number"
+              placeholder = "Enter an amount"
+              error={this.state.valueError}
               value={this.state.value}
               onChange={event => this.setState({ value: event.target.value })}
               label="SGD"
@@ -98,9 +147,12 @@ class RequestNew extends Component {
           </Form.Field>
           <p>Converts to {this.calculateEther(this.state.value).toFixed(6)} ETH</p>
 
-          <Form.Field>
-            <label>Recipient</label>
-            <Input
+          <Form.Field required>
+            <Form.Input
+              required={true}
+              label = "Recipient"
+              placeholder = "Enter recipient address"
+              error={this.state.recipientError}
               value={this.state.recipient}
               onChange={event =>
                 this.setState({ recipient: event.target.value })
@@ -109,7 +161,7 @@ class RequestNew extends Component {
           </Form.Field>
 
           <Message error header="Oops!" content={this.state.errorMessage} />
-          <Button primary loading={this.state.loading}>
+          <Button disabled={!isEnabled} primary loading={this.state.loading}>
             Create!
           </Button>
         </Form>
