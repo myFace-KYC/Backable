@@ -11,6 +11,7 @@ class CampaignNew extends Component {
     minimumContribution: '',
     campaignName: '',
     campaignAddress:'',
+    campaignSubHeader:'',
     creatorName:'',
     endDate:'',
     campaignerAddress:'',
@@ -20,10 +21,23 @@ class CampaignNew extends Component {
     selectedfile: null,
     image: null,
     errorMessage: '',
-    loading: false
+    loading: false,
+    data_eth_conv_rate: 0,
+    value: "",
+    conv_value: ""
   };
 
   componentDidMount() {
+    fetch("https://api.coinmarketcap.com/v2/ticker/1027/?convert=SGD", {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          data_eth_conv_rate: data["data"]["quotes"]["SGD"]["price"]
+          // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
+        });
+      });
     factory.events.returnCampaignAddress ({
     }, function(error, event){})
       .on('data',(event) => {
@@ -31,6 +45,18 @@ class CampaignNew extends Component {
         console.log("print,", this.state.campaignAddress)
         //console.log("calling...",event['returnValues']['_address']);
       });
+  }
+
+  calculateEther(val) {
+    var val_in_ether;
+    if (val == "") {
+      val_in_ether = 0;
+    } 
+    else {
+      val_in_ether =
+        parseFloat(val) / this.state.data_eth_conv_rate;
+    }
+    return val_in_ether;
   }
 
 
@@ -43,21 +69,22 @@ class CampaignNew extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       const result = await factory.methods
-        .createCampaign(this.state.minimumContribution)
+        .createCampaign(this.calculateEther(this.state.minimumContribution))
         .send({
           from: accounts[0]
         });
 
       const formData = new FormData();
-      formData.append('title',JSON.stringify(this.state.campaignName));
-      formData.append('campaign_address',JSON.stringify(this.state.campaignAddress));
-      formData.append('description',JSON.stringify(this.state.campaignDetails));
-      formData.append('goal',JSON.stringify(this.state.campaignTarget));
+      formData.append('title',this.state.campaignName);
+      formData.append('campaign_address',this.state.campaignAddress);
+      formData.append('description',this.state.campaignDetails);
+      formData.append('goal',this.calculateEther(this.state.campaignTarget));
       formData.append('image',this.state.selectedFile);
-      formData.append('tags',JSON.stringify(this.state.tags));
-      formData.append('end_date',JSON.stringify(this.state.endDate));
-      formData.append('creator_name',JSON.stringify(this.state.creatorName));
-      formData.append('campaigner_address',JSON.stringify(accounts[0]));
+      formData.append('tags',this.state.tags);
+      formData.append('end_date',this.state.endDate);
+      formData.append('campaign_subheader',this.state.campaignSubHeader);
+      formData.append('creator_name',this.state.creatorName);
+      formData.append('campaigner_address',accounts[0]);
       for (var pair of formData.entries()) {
           console.log(pair[0]+ ', ' + pair[1]); 
       }
@@ -67,13 +94,6 @@ class CampaignNew extends Component {
         method: "PUT",
         body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-
-
-
       Router.pushRoute('/');
     } catch (err) {
       this.setState({ errorMessage: err.message });
@@ -116,6 +136,16 @@ class CampaignNew extends Component {
               value={this.state.campaignName}
               onChange={event =>
                 this.setState({ campaignName: event.target.value })
+              }
+            />
+          </Form.Field>
+
+          <Form.Field>
+            <label>Campaign Sub Header</label>
+            <Input
+              value={this.state.campaignSubHeader}
+              onChange={event =>
+                this.setState({ campaignSubHeader: event.target.value })
               }
             />
           </Form.Field>
@@ -165,13 +195,17 @@ class CampaignNew extends Component {
               onChange={event =>
                 this.setState({ campaignTarget: event.target.value })
               }
+              label="SGD"
+              labelPosition="right"
             />
           </Form.Field>
+          <p>Converts to {this.calculateEther(this.state.campaignTarget).toFixed(6)} ETH</p>
+
 
           <Form.Field>
             <label>Minimum Contribution</label>
             <Input
-              label="wei"
+              label="SGD"
               labelPosition="right"
               value={this.state.minimumContribution}
               onChange={event =>
@@ -179,6 +213,7 @@ class CampaignNew extends Component {
               }
             />
           </Form.Field>
+          <p>Converts to {this.calculateEther(this.state.minimumContribution).toFixed(6)} ETH</p>
 
           <Message error header="Oops!" content={this.state.errorMessage} />
           <Button loading={this.state.loading} primary>
