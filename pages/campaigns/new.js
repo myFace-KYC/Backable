@@ -45,13 +45,7 @@ class CampaignNew extends Component {
     value: '',
     conv_value: '',
     formError: false,
-    campaignNameError:false,
-    creatorNameError:false,
-    subHeaderError:false,
     endDateError:false,
-    imageError:false,
-    detailsError:false,
-    tagError:false,
     targetError:false,
     minError:false
   };
@@ -88,7 +82,15 @@ class CampaignNew extends Component {
     return val_in_ether;
   }
 
-
+  date_diff_indays(date2) {
+    var dt1 = new Date();
+    var dt2 = new Date(date2);
+    return Math.floor(
+      (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+        Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+        (1000 * 60 * 60 * 24)
+    );
+  }
 
   onSubmit = async event => {
     event.preventDefault();
@@ -106,6 +108,13 @@ class CampaignNew extends Component {
     }else{
       this.setState({minError:false})
     }
+    if(this.date_diff_indays(this.state.endDate) <0){
+      this.setState({endDateError:true})
+      error=true
+    }else{
+      this.setState({endDateError:false})
+    }
+    
 
     if(error){
       this.setState({formError:true})
@@ -181,7 +190,7 @@ class CampaignNew extends Component {
       <Fragment>
         <h3>Create a Campaign</h3>
 
-        <Form onSubmit={this.onSubmit} error={this.state.minError||this.state.targetError}>
+        <Form onSubmit={this.onSubmit} error={this.state.minError||this.state.targetError||this.state.endDateError}>
           
           <Form.Field>
             <Form.Input
@@ -230,12 +239,25 @@ class CampaignNew extends Component {
               }
             />
           </Form.Field>
+          {
+            this.state.endDateError
+            ?
+              <Message
+                error
+                header = "Invalid Date"
+                content = "Please input a future date"
+              />
+            :
+            null
+          }
           
           <Form.Field>
             <Form.Input
               required = {true}
               label = "Campaigner Photo"
-              type="file" onChange={this.fileChangedHandler.bind(this)}
+              type="file" 
+              accept = ".jpeg,.jpg"
+              onChange={this.fileChangedHandler.bind(this)}
             />
             <img id="target" src={this.state.image}/>
           </Form.Field>
