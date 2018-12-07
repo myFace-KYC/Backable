@@ -8,31 +8,58 @@ import CampaignFactory from "../../ethereum/build/CampaignFactory.json";
 
 class CampaignNew extends Component {
   state = {
-    minimumContribution: "",
-    campaignName: "",
-    campaignAddress: "",
-    campaignSubHeader: "",
-    creatorName: "",
-    endDate: "",
-    campaignerAddress: "",
-    campaignDetails: "",
-    campaignTarget: "",
-    tags: "",
+    minimumContribution: '',
+    campaignName: '',
+    campaignAddress:'',
+    campaignSubHeader:'',
+    creatorName:'',
+    endDate:'',
+    campaignerAddress:'',
+    campaignDetails: '',
+    campaignTarget: '',
+    tags:'',
     selectedfile: null,
     image: null,
-    errorMessage: "",
-    loading: false
+    errorMessage: '',
+    loading: false,
+    data_eth_conv_rate: 0,
+    value: "",
+    conv_value: ""
   };
 
   componentDidMount() {
-    factory.events
-      .returnCampaignAddress({}, function(error, event) {})
-      .on("data", event => {
-        this.setState({ campaignAddress: event["returnValues"]["_address"] });
-        console.log("print,", this.state.campaignAddress);
+    fetch("https://api.coinmarketcap.com/v2/ticker/1027/?convert=SGD", {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          data_eth_conv_rate: data["data"]["quotes"]["SGD"]["price"]
+          // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
+        });
+      });
+    factory.events.returnCampaignAddress ({
+    }, function(error, event){})
+      .on('data',(event) => {
+        this.setState({campaignAddress: event['returnValues']['_address']});
+        console.log("print,", this.state.campaignAddress)
         //console.log("calling...",event['returnValues']['_address']);
       });
   }
+
+  calculateEther(val) {
+    var val_in_ether;
+    if (val == "") {
+      val_in_ether = 0;
+    } 
+    else {
+      val_in_ether =
+        parseFloat(val) / this.state.data_eth_conv_rate;
+    }
+    return val_in_ether;
+  }
+
+
 
   onSubmit = async event => {
     event.preventDefault();
@@ -42,34 +69,32 @@ class CampaignNew extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       const result = await factory.methods
-        .createCampaign(this.state.minimumContribution)
+        .createCampaign(this.calculateEther(this.state.minimumContribution))
         .send({
           from: accounts[0]
         });
 
       const formData = new FormData();
-      formData.append("title", this.state.campaignName);
-      formData.append("campaign_address", this.state.campaignAddress);
-      formData.append("description", this.state.campaignDetails);
-      formData.append("goal", this.state.campaignTarget);
-      formData.append("image", this.state.selectedFile);
-      formData.append("tags", this.state.tags);
-      formData.append("end_date", this.state.endDate);
-      formData.append("campaign_subheader", this.state.campaignSubHeader);
-      formData.append("creator_name", this.state.creatorName);
-      formData.append("campaigner_address", accounts[0]);
+      formData.append('title',this.state.campaignName);
+      formData.append('campaign_address',this.state.campaignAddress);
+      formData.append('description',this.state.campaignDetails);
+      formData.append('goal',this.calculateEther(this.state.campaignTarget));
+      formData.append('image',this.state.selectedFile);
+      formData.append('tags',this.state.tags);
+      formData.append('end_date',this.state.endDate);
+      formData.append('campaign_subheader',this.state.campaignSubHeader);
+      formData.append('creator_name',this.state.creatorName);
+      formData.append('campaigner_address',accounts[0]);
       for (var pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
+          console.log(pair[0]+ ', ' + pair[1]); 
       }
       // PUT call to Database
-      const url =
-        "https://backable-db.herokuapp.com/api/v1/new-campaign-submit/";
+      const url = "https://backable-db.herokuapp.com/api/v1/new-campaign-submit/";
       fetch(url, {
         method: "PUT",
         body: formData
-      });
-
-      Router.pushRoute("/");
+      })
+      Router.pushRoute('/');
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -77,16 +102,16 @@ class CampaignNew extends Component {
     this.setState({ loading: false });
   };
 
-  fileChangedHandler = event => {
-    this.setState({ selectedFile: event.target.files[0] });
+  fileChangedHandler = (event) => {
+    this.setState({selectedFile: event.target.files[0]})
     if (event.target.files && event.target.files[0]) {
-      let reader = new FileReader();
-      reader.onload = e => {
-        this.setState({ image: e.target.result });
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                this.setState({image: e.target.result});
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+  }
 
   render() {
     return (
@@ -94,6 +119,7 @@ class CampaignNew extends Component {
         <h3>Create a Campaign</h3>
 
         <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+          
           <Form.Field>
             <label>Campaigner Name</label>
             <Input
@@ -128,14 +154,18 @@ class CampaignNew extends Component {
             <label>Campaign End Date</label>
             <Input
               value={this.state.endDate}
-              onChange={event => this.setState({ endDate: event.target.value })}
+              onChange={event =>
+                this.setState({ endDate: event.target.value })
+              }
             />
           </Form.Field>
 
           <Form.Field>
             <label>Campaign Photo</label>
-            <Input type="file" onChange={this.fileChangedHandler.bind(this)} />
-            <img id="target" src={this.state.image} />
+            <Input 
+            type="file" onChange={this.fileChangedHandler.bind(this)}
+            />
+            <img id="target" src={this.state.image}/>
           </Form.Field>
 
           <Form.Field>
@@ -152,7 +182,9 @@ class CampaignNew extends Component {
             <label>Tags</label>
             <Input
               value={this.state.tags}
-              onChange={event => this.setState({ tags: event.target.value })}
+              onChange={event =>
+                this.setState({ tags: event.target.value })
+              }
             />
           </Form.Field>
 
@@ -163,13 +195,17 @@ class CampaignNew extends Component {
               onChange={event =>
                 this.setState({ campaignTarget: event.target.value })
               }
+              label="SGD"
+              labelPosition="right"
             />
           </Form.Field>
+          <p>Converts to {this.calculateEther(this.state.campaignTarget).toFixed(6)} ETH</p>
+
 
           <Form.Field>
             <label>Minimum Contribution</label>
             <Input
-              label="wei"
+              label="SGD"
               labelPosition="right"
               value={this.state.minimumContribution}
               onChange={event =>
@@ -177,6 +213,7 @@ class CampaignNew extends Component {
               }
             />
           </Form.Field>
+          <p>Converts to {this.calculateEther(this.state.minimumContribution).toFixed(6)} ETH</p>
 
           <Message error header="Oops!" content={this.state.errorMessage} />
           <Button loading={this.state.loading} primary>
