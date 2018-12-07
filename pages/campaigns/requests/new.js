@@ -69,7 +69,7 @@ class RequestNew extends Component {
     }else{
       this.setState({descriptionError:false})
     }
-    if(this.state.value ==='0'){
+    if(this.state.value <=0){
       this.setState({valueError:true})
       error=true
     }else{
@@ -118,7 +118,9 @@ class RequestNew extends Component {
           <a>Back</a>
         </Link>
         <h3>Create a Request</h3>
-        <Form onSubmit={this.onSubmit} error={this.state.formError}>
+        <Form onSubmit={this.onSubmit} error={this.state.recipientError || this.state.valueError}>
+          
+
           <Form.Field>
             <Form.Input
               required={true}
@@ -146,6 +148,18 @@ class RequestNew extends Component {
             />
           </Form.Field>
           <p>Converts to {this.calculateEther(this.state.value).toFixed(6)} ETH</p>
+          
+          {
+            this.state.valueError
+            ?
+              <Message
+                error
+                header = "Invalid Amount"
+                content = "Please input a amount larger than 0."
+              />
+            :
+            null
+          }
 
           <Form.Field required>
             <Form.Input
@@ -160,7 +174,17 @@ class RequestNew extends Component {
             />
           </Form.Field>
 
-          <Message error header="Oops!" content={this.state.errorMessage} />
+          {
+            this.state.recipientError
+            ?
+              <Message
+                error
+                header = "Invalid Recipient Address"
+                content = "Please input a valid address."
+              />
+            :
+            null
+          }
           <Button disabled={!isEnabled} primary loading={this.state.loading}>
             Create!
           </Button>
