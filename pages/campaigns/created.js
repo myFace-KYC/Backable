@@ -69,6 +69,10 @@ class CampaignIndex extends Component {
           campaign_data = data;
         });
 
+      if (campaign_data === null) {
+        return { created_campaign_array, backed_campaign_array };
+      }
+
       campaign_data["campaign_address"] =
         created_campaign_data[hash]["campaign_address"];
       created_campaign_array.push(await campaign_data);
@@ -162,9 +166,6 @@ class CampaignIndex extends Component {
             <b>Raising</b> {campaign["goal"]}
           </p>
           <p> By {campaign["creator_name"]}</p>
-          {/*<Link route={`/campaigns/${campaign["campaign_address"]}`}>*/}
-          {/*<a>View Campaign</a>*/}
-          {/*</Link>*/}
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <a>
               <Button floated="left" content="View Campaign" primary />
