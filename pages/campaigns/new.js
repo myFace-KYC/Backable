@@ -47,7 +47,9 @@ class CampaignNew extends Component {
     formError: false,
     endDateError:false,
     targetError:false,
-    minError:false
+    minError:false,
+    start:0,
+    time:0
   };
 
   componentDidMount() {
@@ -154,6 +156,10 @@ class CampaignNew extends Component {
         method: "PUT",
         body: formData
       })
+      this.setState({start:Date.now()});
+      while (this.state.time < 100000){
+        this.setState({time: Date.now() - this.state.start});
+      }
       Router.pushRoute('/campaigns/' + this.state.campaignAddress);
     } catch (err) {
       this.setState({ errorMessage: err.message });
