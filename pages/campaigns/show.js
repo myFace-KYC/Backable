@@ -39,7 +39,8 @@ title: ""Flying Cars For Everyone""
       data_goal: 0,
       data_endTime: "",
       data_tags: "",
-      data_backerList: []
+      data_backerList: [],
+      data_eth_conv_rate:0
     };
   }
 
@@ -52,8 +53,27 @@ title: ""Flying Cars For Everyone""
         (1000 * 60 * 60 * 24)
     );
   }
+  calculateEther(val) {
+    var val_in_ether;
+    if (val == "") {
+      val_in_ether = 0;
+    } else {
+      val_in_ether = parseFloat(val) * this.state.data_eth_conv_rate;
+    }
+    return val_in_ether;
+  }
 
   componentDidMount() {
+    fetch("https://api.coinmarketcap.com/v2/ticker/1027/?convert=SGD", {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          data_eth_conv_rate: data["data"]["quotes"]["SGD"]["price"]
+          // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
+        });
+      });
     // The address of the campaign to be sent in the header
     let myheaders = {
       // USE this for when create campaign has been finished
@@ -172,7 +192,9 @@ title: ""Flying Cars For Everyone""
                     {parseFloat(
                       web3.utils.fromWei(this.props.balance, "ether")
                     ).toFixed(4)}{" "}
-                    ETH
+                    ETH ({parseFloat(this.calculateEther(
+                      web3.utils.fromWei(this.props.balance, "ether")
+                    )).toFixed(2)} SGD)
                   </h3>
                   <p>
                     pledged of {parseFloat(this.state.data_goal).toFixed(4)} ETH
