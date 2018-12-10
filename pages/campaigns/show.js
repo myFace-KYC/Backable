@@ -6,7 +6,9 @@ import {
   Segment,
   Progress,
   Container,
-  SegmentGroup
+  SegmentGroup,
+  GridRow,
+  GridColumn
 } from "semantic-ui-react";
 
 import Campaign from "../../ethereum/campaign";
@@ -40,7 +42,7 @@ title: ""Flying Cars For Everyone""
       data_endTime: "",
       data_tags: "",
       data_backerList: [],
-      data_eth_conv_rate:0
+      data_eth_conv_rate: 0
     };
   }
 
@@ -134,9 +136,9 @@ title: ""Flying Cars For Everyone""
   render() {
     return (
       <Fragment>
-        <Grid centered>
+        <Grid columns="equal" centered>
           <Grid.Row center aligned verticalAlign="bottom">
-            <Grid.Column width={10}>
+            <Grid.Column width={8}>
               <div style={styles.containerHeaderSegment}>
                 <div style={styles.singleHeaderSegment}>
                   <h1>{this.state.data_title}</h1>
@@ -150,7 +152,7 @@ title: ""Flying Cars For Everyone""
               </div>
             </Grid.Column>
 
-            <Grid.Column width={6}>
+            <Grid.Column width={5}>
               <div style={styles.containerSegment}>
                 <div style={styles.singleSegment}>Created by</div>
                 <div style={styles.addressOverflow}>
@@ -165,15 +167,15 @@ title: ""Flying Cars For Everyone""
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row verticalAlign="middle">
-            <Grid.Column width={10}>
+          <Grid.Row centered verticalAlign="middle">
+            <Grid.Column width={8}>
               <img
                 style={styles.picSegment}
                 src={this.state.data_img}
                 alt="Banner"
               />
             </Grid.Column>
-            <Grid.Column width={6}>
+            <Grid.Column width={5}>
               <div style={styles.containerSegment}>
                 <div style={styles.singleSegment}>
                   <Progress
@@ -192,9 +194,12 @@ title: ""Flying Cars For Everyone""
                     {parseFloat(
                       web3.utils.fromWei(this.props.balance, "ether")
                     ).toFixed(4)}{" "}
-                    ETH ({parseFloat(this.calculateEther(
-                      web3.utils.fromWei(this.props.balance, "ether")
-                    )).toFixed(2)} SGD)
+                    ETH ({parseFloat(
+                      this.calculateEther(
+                        web3.utils.fromWei(this.props.balance, "ether")
+                      )
+                    ).toFixed(2)}{" "}
+                    SGD)
                   </h3>
                   <p>
                     pledged of {parseFloat(this.state.data_goal).toFixed(4)} ETH
@@ -219,15 +224,15 @@ title: ""Flying Cars For Everyone""
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row stretched>
-            <Grid.Column width={10} floated="left">
+          <Grid.Row center stretched>
+            <Grid.Column width={8}>
               <div style={styles.containerSegment}>
                 <p style={styles.singleSegment}>
                   {this.state.data_description}
                 </p>
               </div>
             </Grid.Column>
-            <Grid.Column width={6} floated="right">
+            <Grid.Column width={5}>
               <div style={styles.contributeSegment}>
                 <ContributeForm address={this.props.address} />
                 <div style={styles.viewRequest}>

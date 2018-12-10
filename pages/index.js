@@ -49,6 +49,7 @@ class CampaignIndex extends Component {
       image: campaign["image_url"],
       header: campaign["title"],
       extra: campaign["campaign_address"],
+      link: "",
 
       description: (
         <div>
@@ -76,7 +77,7 @@ class CampaignIndex extends Component {
     return (
       <Grid centered>
         <Grid.Row center aligned verticalAlign="bottom">
-          <Grid.Column mobile={16} computer={10}>
+          <Grid.Column mobile={12} computer={8}>
             <h3>Open Campaigns</h3>
             {this.renderCampaigns()}
           </Grid.Column>
