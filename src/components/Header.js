@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Segment } from "semantic-ui-react";
+import { Menu, Segment, Button } from "semantic-ui-react";
 
 import { Link } from "../routes";
 
@@ -20,7 +20,13 @@ export default () => {
           <a className="item">Home</a>
         </Link>
         <Link route="/campaigns/new">
-          <a className="item">Create Campaign</a>
+          <Button
+            style={{ margin: "5px" }}
+            content="Create Campaign"
+            icon="add circle"
+            inverted
+            color="teal"
+          />
         </Link>
 
         <Menu.Menu position="right">
