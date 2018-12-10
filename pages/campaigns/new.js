@@ -159,6 +159,7 @@ class CampaignNew extends Component {
       }
       Router.pushRoute("/campaigns/" + this.state.campaignAddress);
     } catch (err) {
+      this.setState({ formError: true });
       this.setState({ errorMessage: err.message });
     }
 
@@ -200,7 +201,8 @@ class CampaignNew extends Component {
               error={
                 this.state.minError ||
                 this.state.targetError ||
-                this.state.endDateError
+                this.state.endDateError ||
+                this.state.formError
               }
             >
               <Form.Field>
@@ -346,7 +348,7 @@ class CampaignNew extends Component {
                   content="Please input a amount larger than 0."
                 />
               ) : null}
-              {this.state.errorMessage ? (
+              {this.state.formError ? (
                 <Message
                   error
                   header="Error in Submitting"
