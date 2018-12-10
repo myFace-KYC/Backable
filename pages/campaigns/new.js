@@ -45,9 +45,17 @@ class CampaignNew extends Component {
     value: "",
     conv_value: "",
     formError: false,
+<<<<<<< HEAD
     endDateError: false,
     targetError: false,
     minError: false
+=======
+    endDateError:false,
+    targetError:false,
+    minError:false,
+    start:0,
+    time:0
+>>>>>>> request
   };
 
   componentDidMount() {
@@ -150,8 +158,17 @@ class CampaignNew extends Component {
       fetch(url, {
         method: "PUT",
         body: formData
+<<<<<<< HEAD
       });
       Router.pushRoute("/campaigns/" + this.state.campaignAddress);
+=======
+      })
+      this.setState({start:Date.now()});
+      while (this.state.time < 100000){
+        this.setState({time: Date.now() - this.state.start});
+      }
+      Router.pushRoute('/campaigns/' + this.state.campaignAddress);
+>>>>>>> request
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
