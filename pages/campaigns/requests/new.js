@@ -40,7 +40,7 @@ class RequestNew extends Component {
         });
       });
   }
-
+// calculate ether
   calculateEther(val) {
     var val_in_ether;
     if (val == "") {
