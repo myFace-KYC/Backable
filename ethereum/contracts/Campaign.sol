@@ -61,13 +61,33 @@ contract Campaign {
         
         require(msg.value > minimumContribution);
 
-        // Add contributer to approvers
-        approvers[msg.sender] = true;
-        approversCount++;
 
+        if (approvers[msg.sender]){
+
+        } else {
+            // Add contributer to approvers
+            approvers[msg.sender] = true;
+            approversCount++;
+            // ++ Push contributer address to approversList
+            approversList.push(msg.sender);
+
+        }
+        // Add contributer to approvers
         // ++ Push contributer address to approversList 
-        approversList.push(msg.sender);
+        
     }
+
+    // function contribute() public payable {
+        
+    //     require(msg.value > minimumContribution);
+
+    //     // Add contributer to approvers
+    //     approvers[msg.sender] = true;
+    //     approversCount++;
+
+    //     // ++ Push contributer address to approversList 
+    //     approversList.push(msg.sender);
+    // }
 
     function createRequest(string description, uint value, address recipient) public restricted {
         Request memory newRequest = Request({

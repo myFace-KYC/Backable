@@ -39,24 +39,23 @@ class ContributeForm extends Component {
       await campaign.methods.contribute().send({
         from: accounts[0],
         value: web3.utils.toWei(
-          (
+          parseFloat(
             parseFloat(this.state.value) / this.state.data_eth_conv_rate
-          ).toString(),
+          )
+            .toFixed(8)
+            .toString(),
           "ether"
         )
       });
-
 
       const formData = new FormData();
       formData.append("backer_address", accounts[0]);
       formData.append("campaign_address", this.props.address);
       // PUT call to Database
-      const url =
-        "https://backable-db.herokuapp.com/api/v1/submit-new-pledge/";
+      const url = "https://backable-db.herokuapp.com/api/v1/submit-new-pledge/";
       fetch(url, {
         method: "PUT",
         body: formData
-
       });
 
       Router.replaceRoute(`/campaigns/${this.props.address}`);
