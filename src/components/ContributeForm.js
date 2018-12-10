@@ -83,6 +83,7 @@ class ContributeForm extends Component {
         <Form.Field>
           <label>Amount to Contribute</label>
           <Input
+            type = "number"
             value={this.state.value}
             onChange={event => this.setState({ value: event.target.value })}
             label="SGD"
