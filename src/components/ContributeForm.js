@@ -74,6 +74,7 @@ class ContributeForm extends Component {
             value={this.state.value}
             onChange={event => this.setState({ value: event.target.value })}
             label="SGD"
+            fluid
             labelPosition="right"
           />
         </Form.Field>

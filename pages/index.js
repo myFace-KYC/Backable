@@ -76,7 +76,7 @@ class CampaignIndex extends Component {
     return (
       <Grid centered>
         <Grid.Row center aligned verticalAlign="bottom">
-          <Grid.Column width={10}>
+          <Grid.Column mobile={16} tablet={14} computer={10}>
             <h3>Open Campaigns</h3>
             {this.renderCampaigns()}
           </Grid.Column>
