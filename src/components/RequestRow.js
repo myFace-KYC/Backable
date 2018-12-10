@@ -8,7 +8,8 @@ let accounts = [];
 
 class RequestRow extends Component {
   state = {
-    data_eth_conv_rate: 0
+    data_eth_conv_rate: 0,
+    iscreator: false
   };
   static async getInitialProps(props) {
     await web3.eth.getAccounts().then(address => (accounts = address));
@@ -25,7 +26,7 @@ class RequestRow extends Component {
 
           // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
         });
-        console.log(this.state.data_eth_conv_rate);
+        // console.log(this.state.data_eth_conv_rate)
       });
   }
 
@@ -51,7 +52,7 @@ class RequestRow extends Component {
     const { Row, Cell } = Table;
     const { id, request, approversCount } = this.props;
     const readyToFinalize = request.approvalCount > approversCount / 2;
-    console.log(request.value);
+    // console.log(request.value)
 
     return (
       <Row
@@ -81,8 +82,8 @@ class RequestRow extends Component {
           {request.complete ? null : (
             <Button
               disabled={!readyToFinalize}
+              basic={!readyToFinalize}
               color="teal"
-              basic
               onClick={this.onFinalize}
             >
               Finalize

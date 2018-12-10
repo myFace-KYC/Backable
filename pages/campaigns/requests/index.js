@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Button, Table } from "semantic-ui-react";
-
+import web3 from "../../../ethereum/web3";
 import { Link } from "../../../src/routes";
 import Campaign from "../../../ethereum/campaign";
 import RequestRow from "../../../src/components/RequestRow";
@@ -11,9 +11,6 @@ class RequestIndex extends Component {
     const campaign = Campaign(address);
     const requestCount = await campaign.methods.getRequestsCount().call();
     const approversCount = await campaign.methods.approversCount().call();
-    const useraddress = web3.eth.getAccounts();
-    const summary = await campaign.methods.getSummary().call();
-    const manager_address = summary[4];
 
     const requests = await Promise.all(
       Array(parseInt(requestCount))
@@ -48,12 +45,7 @@ class RequestIndex extends Component {
         <h3>Requests</h3>
         <Link route={`/campaigns/${this.props.address}/requests/new`}>
           <a>
-            <Button
-              disabled={this.props.manager_address != this.props.useraddress}
-              primary
-              floated="right"
-              style={{ marginBottom: 10 }}
-            >
+            <Button primary floated="right" style={{ marginBottom: 10 }}>
               Add Request
             </Button>
           </a>
@@ -63,7 +55,7 @@ class RequestIndex extends Component {
             <Row>
               <HeaderCell>ID</HeaderCell>
               <HeaderCell>Description</HeaderCell>
-              <HeaderCell>Amount</HeaderCell>
+              <HeaderCell>Amount (SGD)</HeaderCell>
               <HeaderCell>Recipient</HeaderCell>
               <HeaderCell>Approval Count</HeaderCell>
               <HeaderCell>Approve</HeaderCell>
