@@ -52,7 +52,7 @@ class CampaignIndex extends Component {
 
       description: (
         <div>
-          <p>{campaign["description"]}</p>
+          <p>{campaign["campaign_subheader"]}</p>
           <Link route={`/campaigns/${campaign["campaign_address"]}`}>
             <Button
               style={{ margin: "3px" }}

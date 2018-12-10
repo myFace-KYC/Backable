@@ -25,7 +25,7 @@ class RequestRow extends Component {
 
           // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
         });
-        console.log(this.state.data_eth_conv_rate);
+        //console.log(this.state.data_eth_conv_rate);
       });
   }
 

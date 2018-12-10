@@ -11,9 +11,6 @@ class RequestIndex extends Component {
     const campaign = Campaign(address);
     const requestCount = await campaign.methods.getRequestsCount().call();
     const approversCount = await campaign.methods.approversCount().call();
-    const useraddress = web3.eth.getAccounts();
-    const summary = await campaign.methods.getSummary().call();
-    const manager_address = summary[4];
 
     const requests = await Promise.all(
       Array(parseInt(requestCount))
@@ -49,7 +46,6 @@ class RequestIndex extends Component {
         <Link route={`/campaigns/${this.props.address}/requests/new`}>
           <a>
             <Button
-              disabled={this.props.manager_address != this.props.useraddress}
               primary
               floated="right"
               style={{ marginBottom: 10 }}
