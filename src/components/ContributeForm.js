@@ -52,7 +52,7 @@ class ContributeForm extends Component {
       formData.append("backer_address", accounts[0]);
       formData.append("campaign_address", this.props.address);
       // PUT call to Database
-      const url = "https://backable-db.herokuapp.com/api/v1/submit-new-pledge/";
+      const url = "https://backable-db.herokuapp.com/api/v1/submit-new-pledge";
       fetch(url, {
         method: "PUT",
         body: formData
