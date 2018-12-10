@@ -1,13 +1,19 @@
-import React, { Component } from 'react';
-import { Table, Button } from 'semantic-ui-react';
+import React, { Component } from "react";
+import { Table, Button } from "semantic-ui-react";
 
-import web3 from '../../ethereum/web3';
-import Campaign from '../../ethereum/campaign';
+import web3 from "../../ethereum/web3";
+import Campaign from "../../ethereum/campaign";
+
+let accounts = [];
 
 class RequestRow extends Component {
   state = {
     data_eth_conv_rate: 0
   };
+  static async getInitialProps(props) {
+    await web3.eth.getAccounts().then(address => (accounts = address));
+  }
+
   componentDidMount() {
     fetch("https://api.coinmarketcap.com/v2/ticker/1027/?convert=SGD", {
       method: "GET"
@@ -19,7 +25,7 @@ class RequestRow extends Component {
 
           // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
         });
-        console.log(this.state.data_eth_conv_rate)
+        console.log(this.state.data_eth_conv_rate);
       });
   }
 
@@ -45,7 +51,7 @@ class RequestRow extends Component {
     const { Row, Cell } = Table;
     const { id, request, approversCount } = this.props;
     const readyToFinalize = request.approvalCount > approversCount / 2;
-    console.log(request.value)
+    console.log(request.value);
 
     return (
       <Row
@@ -54,7 +60,12 @@ class RequestRow extends Component {
       >
         <Cell>{id}</Cell>
         <Cell>{request.description}</Cell>
-        <Cell>{parseFloat(parseFloat(web3.utils.fromWei(request.value, 'ether')) * this.state.data_eth_conv_rate).toFixed(2)}</Cell>
+        <Cell>
+          {parseFloat(
+            parseFloat(web3.utils.fromWei(request.value, "ether")) *
+              this.state.data_eth_conv_rate
+          ).toFixed(2)}
+        </Cell>
         <Cell>{request.recipient}</Cell>
         <Cell>
           {request.approvalCount}/{approversCount}
@@ -68,7 +79,12 @@ class RequestRow extends Component {
         </Cell>
         <Cell>
           {request.complete ? null : (
-            <Button color="teal" basic onClick={this.onFinalize}>
+            <Button
+              disabled={!readyToFinalize}
+              color="teal"
+              basic
+              onClick={this.onFinalize}
+            >
               Finalize
             </Button>
           )}
