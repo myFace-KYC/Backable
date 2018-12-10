@@ -40,7 +40,7 @@ class ContributeForm extends Component {
         from: accounts[0],
         value: web3.utils.toWei(
           (
-            parseFloat(this.state.value) / this.state.data_eth_conv_rate
+            parseFloat(parseFloat(this.state.value) / this.state.data_eth_conv_rate).toFixed(8)
           ).toString(),
           "ether"
         )
@@ -50,13 +50,15 @@ class ContributeForm extends Component {
       const formData = new FormData();
       formData.append("backer_address", accounts[0]);
       formData.append("campaign_address", this.props.address);
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
       // PUT call to Database
       const url =
-        "https://backable-db.herokuapp.com/api/v1/submit-new-pledge/";
+        "https://backable-db.herokuapp.com/api/v1/submit-new-pledge";
       fetch(url, {
         method: "PUT",
         body: formData
-
       });
 
       Router.replaceRoute(`/campaigns/${this.props.address}`);
