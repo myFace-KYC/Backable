@@ -97,7 +97,7 @@ class RequestNew extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       await campaign.methods
-        .createRequest(description, this.calculateEther(this.state.value), recipient)
+        .createRequest(description, web3.utils.toWei(parseFloat(this.calculateEther(this.state.value)),'ether').toFixed(8).toString(), recipient)
         .send({ from: accounts[0] });
 
       Router.pushRoute(`/campaigns/${this.props.address}/requests`);

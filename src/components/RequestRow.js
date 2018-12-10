@@ -5,6 +5,24 @@ import web3 from '../../ethereum/web3';
 import Campaign from '../../ethereum/campaign';
 
 class RequestRow extends Component {
+  state = {
+    data_eth_conv_rate: 0
+  };
+  componentDidMount() {
+    fetch("https://api.coinmarketcap.com/v2/ticker/1027/?convert=SGD", {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          data_eth_conv_rate: data["data"]["quotes"]["SGD"]["price"]
+
+          // conv_value : toString(parseFloat(value)/data_eth_conv_rate) ,
+        });
+        console.log(this.state.data_eth_conv_rate)
+      });
+  }
+
   onApprove = async () => {
     const campaign = Campaign(this.props.address);
 
@@ -27,6 +45,7 @@ class RequestRow extends Component {
     const { Row, Cell } = Table;
     const { id, request, approversCount } = this.props;
     const readyToFinalize = request.approvalCount > approversCount / 2;
+    console.log(request.value)
 
     return (
       <Row
@@ -35,7 +54,7 @@ class RequestRow extends Component {
       >
         <Cell>{id}</Cell>
         <Cell>{request.description}</Cell>
-        <Cell>{web3.utils.fromWei(request.value, 'ether')}</Cell>
+        <Cell>{parseFloat(parseFloat(web3.utils.fromWei(request.value, 'ether')) * this.state.data_eth_conv_rate).toFixed(6)}</Cell>
         <Cell>{request.recipient}</Cell>
         <Cell>
           {request.approvalCount}/{approversCount}
