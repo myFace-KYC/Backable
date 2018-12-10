@@ -351,9 +351,10 @@ class CampaignNew extends Component {
               <Button
                 fluid
                 circular
-                color="violet"
+                color="green"
                 disabled={!isEnabled}
                 loading={this.state.loading}
+                size="huge"
               >
                 Create!
               </Button>
