@@ -174,7 +174,10 @@ title: ""Flying Cars For Everyone""
                     ).toFixed(4)}{" "}
                     ETH
                   </h3>
-                  <p>pledged of {this.state.data_goal} ETH goal</p>
+                  <p>
+                    pledged of {parseFloat(this.state.data_goal).toFixed(4)} ETH
+                    goal
+                  </p>
                 </div>
 
                 <div style={styles.singleSegment}>

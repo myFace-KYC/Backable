@@ -45,12 +45,11 @@ class CampaignNew extends Component {
     value: "",
     conv_value: "",
     formError: false,
-    endDateError:false,
-    targetError:false,
-    minError:false,
-    start:0,
-    time:0
-
+    endDateError: false,
+    targetError: false,
+    minError: false,
+    start: 0,
+    time: 0
   };
 
   componentDidMount() {
@@ -153,14 +152,18 @@ class CampaignNew extends Component {
       fetch(url, {
         method: "PUT",
         body: formData
-
       });
+<<<<<<< HEAD
       this.setState({start:Date.now()});
       while (this.state.time < 1000){
         this.setState({time: Date.now() - this.state.start});
+=======
+      this.setState({ start: Date.now() });
+      while (this.state.time < 1000) {
+        this.setState({ time: Date.now() - this.state.start });
+>>>>>>> 096c723a4beeed89a7c58533e13f2e4a45df3a7f
       }
-      Router.pushRoute('/campaigns/' + this.state.campaignAddress);
-
+      Router.pushRoute("/campaigns/" + this.state.campaignAddress);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
