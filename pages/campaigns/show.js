@@ -194,13 +194,16 @@ title: ""Flying Cars For Everyone""
                     {parseFloat(
                       web3.utils.fromWei(this.props.balance, "ether")
                     ).toFixed(4)}{" "}
-                    ETH ({parseFloat(
+                    ETH
+                  </h3>
+                  <p>
+                    {parseFloat(
                       this.calculateEther(
                         web3.utils.fromWei(this.props.balance, "ether")
                       )
                     ).toFixed(2)}{" "}
-                    SGD)
-                  </h3>
+                    SGD
+                  </p>
                   <p>
                     pledged of {parseFloat(this.state.data_goal).toFixed(4)} ETH
                     goal
@@ -243,6 +246,11 @@ title: ""Flying Cars For Everyone""
                       </Button>
                     </a>
                   </Link>
+                  <p style={{ paddingTop: "20px" }}>
+                    {" "}
+                    Minimum contribution amount:{" "}
+                    {this.props.minimumContribution}
+                  </p>
                 </div>
               </div>
             </Grid.Column>
