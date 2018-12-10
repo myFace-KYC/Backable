@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button } from "semantic-ui-react";
+import { Card, Button, Grid, GridRow, GridColumn } from "semantic-ui-react";
 
 // import factory from "../ethereum/factory";
 import { Link } from "../../src/routes";
@@ -182,26 +182,32 @@ class CampaignIndex extends Component {
 
   render() {
     return (
-      <div>
-        <h2>Campaigns You've Created</h2>
+      <Grid>
+        <GridRow>
+          <GridColumn width={8}>
+            <div>
+              <h2>Campaigns You've Created</h2>
 
-        {/*<Link route="/campaigns/new">*/}
-        {/*<a>*/}
-        {/*<Button*/}
-        {/*floated="right"*/}
-        {/*content="Create Campaign"*/}
-        {/*icon="add circle"*/}
-        {/*primary*/}
-        {/*/>*/}
-        {/*</a>*/}
-        {/*</Link>*/}
+              {/*<Link route="/campaigns/new">*/}
+              {/*<a>*/}
+              {/*<Button*/}
+              {/*floated="right"*/}
+              {/*content="Create Campaign"*/}
+              {/*icon="add circle"*/}
+              {/*primary*/}
+              {/*/>*/}
+              {/*</a>*/}
+              {/*</Link>*/}
 
-        {this.renderCampaigns("created")}
+              {this.renderCampaigns("created")}
 
-        <h2> Campaigns You've Backed</h2>
+              <h2> Campaigns You've Backed</h2>
 
-        {this.renderCampaigns("backed")}
-      </div>
+              {this.renderCampaigns("backed")}
+            </div>
+          </GridColumn>
+        </GridRow>
+      </Grid>
     );
   }
 }
