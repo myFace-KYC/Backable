@@ -54,7 +54,7 @@ class RequestRow extends Component {
       >
         <Cell>{id}</Cell>
         <Cell>{request.description}</Cell>
-        <Cell>{parseFloat(parseFloat(web3.utils.fromWei(request.value, 'ether')) * this.state.data_eth_conv_rate).toFixed(6)}</Cell>
+        <Cell>{parseFloat(parseFloat(web3.utils.fromWei(request.value, 'ether')) * this.state.data_eth_conv_rate).toFixed(2)}</Cell>
         <Cell>{request.recipient}</Cell>
         <Cell>
           {request.approvalCount}/{approversCount}

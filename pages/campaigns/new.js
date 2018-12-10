@@ -154,7 +154,7 @@ class CampaignNew extends Component {
         body: formData
       });
       this.setState({start:Date.now()});
-      while (this.state.time < 1000){
+      while (this.state.time < 3000){
         this.setState({time: Date.now() - this.state.start});
       }
       Router.pushRoute("/campaigns/" + this.state.campaignAddress);

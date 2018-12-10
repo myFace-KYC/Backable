@@ -97,7 +97,7 @@ class RequestNew extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       await campaign.methods
-        .createRequest(description, web3.utils.toWei(parseFloat(this.calculateEther(this.state.value)),'ether').toFixed(8).toString(), recipient)
+        .createRequest(description, web3.utils.toWei(parseFloat(this.calculateEther(this.state.value)).toFixed(8).toString(),'ether'), recipient)
         .send({ from: accounts[0] });
 
       Router.pushRoute(`/campaigns/${this.props.address}/requests`);
@@ -181,6 +181,17 @@ class RequestNew extends Component {
                 error
                 header = "Invalid Recipient Address"
                 content = "Please input a valid address."
+              />
+            :
+            null
+          }
+          {
+            this.state.errorMessage
+            ?
+              <Message
+                error
+                header = "Error!"
+                content = {this.state.errorMessage}
               />
             :
             null
