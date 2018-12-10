@@ -127,7 +127,7 @@ class CampaignNew extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       const result = await factory.methods
-        .createCampaign(this.calculateEther(this.state.minimumContribution))
+        .createCampaign(web3.utils.toWei(parseFloat(this.calculateEther(this.state.minimumContribution)).toFixed(8).toString(),'ether'))
         .send({
           from: accounts[0]
         });
