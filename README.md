@@ -10,7 +10,7 @@ Backable is a decentralised crowdfunding platform which does not involve a middl
 This project runs on [Node.js](https://nodejs.org/en/)
 
 
-### Instal Dependencies
+### Install Dependencies
 
 ```
 npm install
