@@ -248,15 +248,17 @@ title: ""Flying Cars For Everyone""
                   </Link>
                   <p style={{ paddingTop: "20px" }}>
                     {"Minimum contribution amount: "}
-                    {(
-                      parseFloat(
-                        web3.utils.fromWei(
-                          this.props.minimumContribution,
-                          "ether"
-                        )
-                      ) * this.state.data_eth_conv_rate
-                    ).toFixed(2)}
-                    {" SGD"}
+                    <b>
+                      {(
+                        parseFloat(
+                          web3.utils.fromWei(
+                            this.props.minimumContribution,
+                            "ether"
+                          )
+                        ) * this.state.data_eth_conv_rate
+                      ).toFixed(2)}
+                      {" SGD"}
+                    </b>
                   </p>
                 </div>
               </div>
