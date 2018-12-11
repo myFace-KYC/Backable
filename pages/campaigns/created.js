@@ -3,7 +3,7 @@ import { Card, Button, Grid, GridRow, GridColumn } from "semantic-ui-react";
 
 // import factory from "../ethereum/factory";
 import { Link } from "../../src/routes";
-// import styles from "./created.css.js";
+import styles from "./created.css.js";
 import web3 from "../../ethereum/web3";
 import { Router } from "../../src/routes";
 
@@ -116,7 +116,7 @@ class CampaignIndex extends Component {
 
     backed_campaign_addresses = [...new Set(backed_campaign_addresses)];
 
-    let campaign_data = {};
+    let final_backed_data = {};
 
     for (const address of backed_campaign_addresses) {
       let headers = {
@@ -131,11 +131,11 @@ class CampaignIndex extends Component {
           return response.json();
         }) // change to return response.text()
         .then(data => {
-          campaign_data = data;
+          final_backed_data = data;
         });
 
-      campaign_data["campaign_address"] = address;
-      backed_campaign_array.push(await campaign_data);
+      final_backed_data["campaign_address"] = address;
+      backed_campaign_array.push(await final_backed_data);
       console.log(backed_campaign_array);
     }
 
@@ -167,7 +167,7 @@ class CampaignIndex extends Component {
       extra: campaign["campaign_address"],
       description: (
         <div>
-          <p>{campaign["description"]}</p>
+          <p>{campaign["campaign_subheader"]}</p>
 
           <p> By {campaign["creator_name"]}</p>
           {/*<Link route={`/campaigns/${campaign["campaign_address"]}`}>*/}
@@ -190,9 +190,9 @@ class CampaignIndex extends Component {
 
   render() {
     return (
-      <Grid>
-        <GridRow>
-          <GridColumn width={8}>
+      <Grid centered>
+        <Grid.Row center aligned verticalAlign="bottom">
+          <Grid.Column mobile={12} computer={8}>
             <div>
               <h2>Campaigns You've Created</h2>
 
@@ -202,8 +202,8 @@ class CampaignIndex extends Component {
 
               {this.renderCampaigns("backed")}
             </div>
-          </GridColumn>
-        </GridRow>
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
     );
   }
